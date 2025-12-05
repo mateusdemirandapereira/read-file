@@ -10,7 +10,6 @@ Este projeto tem como objetivo **ler, interpretar e processar arquivos** proveni
 - 🔍 Validação da estrutura e do layout de cada arquivo  
 - 🧹 Padronização e limpeza dos dados  
 - 📝 Identificação de clientes negativados  
-- 📊 Exportação dos dados tratados (JSON, CSV ou banco de dados)  
 - ⚙️ Base para integração com sistemas internos
 
 ---
