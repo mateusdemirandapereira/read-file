@@ -27,9 +27,9 @@ Este projeto tem como objetivo **ler, interpretar e processar arquivos** proveni
 
 ## 🚀 Tecnologias Utilizadas
 
-- Linguagem: **(adicione aqui: Python, C, Java, etc.)**  
+- Linguagem: **Java, SQL**  
 - Bibliotecas principais:  
-  - Ex.: `pandas`, `csv`, `json`  
+  - Ex.: `opencsv`, `mysql-connector-java`, `org.openjfx`   
   - (Adapte conforme o seu projeto)
 
 ---
