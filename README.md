@@ -29,9 +29,8 @@ Este projeto tem como objetivo **ler, interpretar e processar arquivos** proveni
 - Linguagem: **Java, SQL**  
 - Bibliotecas principais:  
   - Ex.: `opencsv`, `mysql-connector-java`, `org.openjfx`   
-  - (Adapte conforme o seu projeto)
-
----
+ 
+ ---
 
 ## ▶️ Como Executar
 
