@@ -16,5 +16,7 @@ public abstract class Dao<T> {
 	public abstract void inserir(List<T> clientes);
 	
 	public abstract void deletarTodos();
+	
+	public abstract List<T> pegarNegativado();
 
 }

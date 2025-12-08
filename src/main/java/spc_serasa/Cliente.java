@@ -27,6 +27,12 @@ public abstract class Cliente {
 		this.dataVencimento = dataVencimento;
 		this.tipo = tipo;
 	}
+	
+	public Cliente(String cpf) {
+		
+		this(0l, null, cpf, null, null,0f, null, null);
+	}
+
 
 	public long getCodigo() {
 		return codigo;

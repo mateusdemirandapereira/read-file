@@ -114,5 +114,31 @@ public class SpcDao extends Dao<ClienteSpc> {
 
 		}
 	}
+	
+	@Override 
+	public List<ClienteSpc> pegarNegativado() {
+		String sql = "select spc.spc_cpf, spc.spc_contrato_parcela from spc where spc.spc_data_exclusao is null";
+		
+		List<ClienteSpc> lista = new ArrayList<>();
+		try (PreparedStatement pstmp = conn.prepareStatement(sql)) {
+			
+			ResultSet resultSet = pstmp.executeQuery();
+			
+			while(resultSet.next()) {
+				String cpf = resultSet.getNString(1);
+				String contrato = resultSet.getNString(2);
+				
+				ClienteSpc clienteSpc = new ClienteSpc(cpf, contrato);
+				
+				lista.add(clienteSpc);
+			}
+			
+			return lista;
+			
+		} catch(SQLException ex) {
+			throw new RuntimeException("Erro ao pegar os clientes negativados do SPC!", ex);
+		}
+		
+	}
 
 }

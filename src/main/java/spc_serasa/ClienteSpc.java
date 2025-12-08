@@ -23,6 +23,15 @@ public class ClienteSpc extends Cliente {
 
 	}
 	
+	public ClienteSpc(String cpf, String contrato) {
+		super(cpf);
+		this.contrato = contrato;
+		this.dataExclusao = null;
+		this.codigoNotificacao = 0;
+		this.codigoAssociado = 0;
+	}
+
+	
 	public long getCodigoSpc() {
 		return super.getCodigo();
 	}
