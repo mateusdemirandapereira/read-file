@@ -17,6 +17,7 @@ public abstract class Dao<T> {
 	
 	public abstract void deletarTodos();
 	
-	public abstract List<T> pegarNegativado();
+	public abstract List<T> pegarNegativado();	
+
 
 }

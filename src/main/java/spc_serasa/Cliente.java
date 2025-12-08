@@ -19,8 +19,8 @@ public abstract class Cliente {
 			LocalDate dataVencimento, String tipo) {
 		
 		this.codigo = codigo;
-		this.nome = Objects.requireNonNull(nome, "Nome não pode ser null");
-		this.cpf = Objects.requireNonNull(cpf, "CPF não pode ser null");
+		this.nome = nome;
+		this.cpf = cpf;
 		this.dataInclusao = dataInclusao;
 		this.hora =  hora != null ? hora : LocalTime.MIDNIGHT;
 		this.valor = valor;

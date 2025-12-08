@@ -136,8 +136,17 @@ public class SpcDao extends Dao<ClienteSpc> {
 			return lista;
 			
 		} catch(SQLException ex) {
-			throw new RuntimeException("Erro ao pegar os clientes negativados do SPC!", ex);
+			throw new RuntimeException("Não há clientes negativados no SPC.", ex);
 		}
+		
+	}
+	
+
+	public void atualizaNegativado(List<ClienteSpc> clientes) {
+		
+		String sql = "";
+		
+		
 		
 	}
 
