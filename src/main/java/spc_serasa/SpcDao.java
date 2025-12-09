@@ -144,9 +144,69 @@ public class SpcDao extends Dao<ClienteSpc> {
 
 	public void atualizaNegativado(List<ClienteSpc> clientes) {
 		
-		String sql = "";
+		String sql1 = "update itxa set itxa.status = 3 where itxa.contrno = ? and itxa.instno = ?";
+		
+		String sql2 = "update itxa set itxa.status = case "
+				+ "when datediff(date_format(current_date(), \"%Y%m%d\"), itxa.duedate) > 30 then 3 "
+				+ "else 0 "
+				+ "end   where itxa.contrno = ? and itxa.status = ?";
 		
 		
+		try(PreparedStatement psm1 = conn.prepareStatement(sql1);
+			PreparedStatement psm2 = conn.prepareStatement(sql2);) {
+			
+			for (ClienteSpc cliente : clientes) {
+				long contrato = separaContrato(cliente);
+				int parcela = separaParcela(cliente);
+				
+				if (contrato > 0 && parcela > 0) {
+					psm1.setLong(1, contrato);
+					psm1.setInt(2, parcela);
+					psm1.executeUpdate();
+				} else if (contrato > 0 && parcela <= 0) {
+					psm2.setLong(1, contrato);
+					psm2.setInt(2, 0);
+					psm2.executeUpdate();
+				}
+			}
+			
+			
+			
+		} catch(SQLException ex) {
+			throw new RuntimeException("Erro ao tentar negativar os Cliente do spc", ex);
+		}
+		
+		
+		
+	}
+	
+	private long separaContrato(ClienteSpc cliente) {
+		String contrato  = cliente.getContrato().trim();
+		
+		contrato = contrato.replace("/", "-");
+		
+		if (contrato.contains("-")) {
+			return Long.parseLong(contrato.split("-")[0]);
+		}
+		
+		return Long.parseLong(contrato);
+		
+		
+	}
+	private int separaParcela(ClienteSpc cliente) {
+		String contrato  = cliente.getContrato().trim();
+		
+		contrato = contrato.replace("/", "-");
+		
+		if (contrato.contains("-")) {
+			String[] partes = contrato.split("-");
+			
+			if (partes.length > 1) {
+				return Integer.parseInt(partes[1]);
+			}
+		}
+		
+		return 0;
 		
 	}
 

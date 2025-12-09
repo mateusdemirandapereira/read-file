@@ -12,9 +12,7 @@ public class TesteSpc {
 		
 		List<ClienteSpc> listaCliente = spcDao.pegarNegativado();
 		
-		for (ClienteSpc cliente: listaCliente) {
-			System.out.println(cliente);
-		}
+		spcDao.atualizaNegativado(listaCliente);
 		
 	}
 
