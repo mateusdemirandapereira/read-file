@@ -12,7 +12,11 @@ public class TesteSpc {
 		
 		List<ClienteSpc> listaCliente = spcDao.pegarNegativado();
 		
-		spcDao.atualizaNegativado(listaCliente);
+		Connection conn2 = new ConnectionFactory().getConnection("db2");
+		
+		SpcDao spcDao2 = new SpcDao(conn2);
+		
+		spcDao2.atualizaNegativado(listaCliente);
 		
 	}
 

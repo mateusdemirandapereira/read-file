@@ -125,8 +125,8 @@ public class SpcDao extends Dao<ClienteSpc> {
 			ResultSet resultSet = pstmp.executeQuery();
 			
 			while(resultSet.next()) {
-				String cpf = resultSet.getNString(1);
-				String contrato = resultSet.getNString(2);
+				String cpf = resultSet.getString(1);
+				String contrato = resultSet.getString(2);
 				
 				ClienteSpc clienteSpc = new ClienteSpc(cpf, contrato);
 				
@@ -147,9 +147,9 @@ public class SpcDao extends Dao<ClienteSpc> {
 		String sql1 = "update itxa set itxa.status = 3 where itxa.contrno = ? and itxa.instno = ?";
 		
 		String sql2 = "update itxa set itxa.status = case "
-				+ "when datediff(date_format(current_date(), \"%Y%m%d\"), itxa.duedate) > 30 then 3 "
+				+ "when datediff(date_format(current_date(), \"%Y%m%d\"), itxa.duedate) >= 30 then 3 "
 				+ "else 0 "
-				+ "end   where itxa.contrno = ? and itxa.status = ?";
+				+ "end   where itxa.contrno = ? and itxa.status not in(?, ?)";
 		
 		
 		try(PreparedStatement psm1 = conn.prepareStatement(sql1);
@@ -165,7 +165,8 @@ public class SpcDao extends Dao<ClienteSpc> {
 					psm1.executeUpdate();
 				} else if (contrato > 0 && parcela <= 0) {
 					psm2.setLong(1, contrato);
-					psm2.setInt(2, 0);
+					psm2.setInt(2, 5);
+					psm2.setInt(3, 1);
 					psm2.executeUpdate();
 				}
 			}
@@ -183,7 +184,7 @@ public class SpcDao extends Dao<ClienteSpc> {
 	private long separaContrato(ClienteSpc cliente) {
 		String contrato  = cliente.getContrato().trim();
 		
-		contrato = contrato.replace("/", "-");
+		contrato = contrato.replace("/", "-").replaceAll("[\\s\\u00A0]+","").trim();
 		
 		if (contrato.contains("-")) {
 			return Long.parseLong(contrato.split("-")[0]);
@@ -202,7 +203,7 @@ public class SpcDao extends Dao<ClienteSpc> {
 			String[] partes = contrato.split("-");
 			
 			if (partes.length > 1) {
-				return Integer.parseInt(partes[1]);
+				return Integer.parseInt(partes[1].trim());
 			}
 		}
 		
