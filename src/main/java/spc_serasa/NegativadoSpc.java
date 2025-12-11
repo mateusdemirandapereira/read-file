@@ -19,7 +19,9 @@ public class NegativadoSpc extends Negativado {
 			long codigoSpc = getLong(cliente,0);
 			String cpfCnpj = getCampo(cliente,1);
 			String consumidor = getCampo(cliente,2);
-			String contrato = getCampo(cliente,3);
+			String contrato = formatoContrato(getCampo(cliente,3));
+			
+			
 			LocalDate dataVencimento = paraData(getCampo(cliente,4));
 			double valorDebito = paraValor(getCampo(cliente,5));
 			LocalDate dataInclusao = paraData(getCampo(cliente,6));
@@ -46,6 +48,21 @@ public class NegativadoSpc extends Negativado {
 		} catch(Exception e) {
 			return 0;
 		}
+	}
+	
+	private String formatoContrato(String contrato) {
+		
+			
+		
+			long numeroContrato = UtilCliente.separaContrato(contrato);
+			int numeroParcela = UtilCliente.separaParcela(contrato);
+			
+			
+			
+			return String.format("%d-%d", numeroContrato,numeroParcela);	
+	
+		
+		
 	}
 	
 	

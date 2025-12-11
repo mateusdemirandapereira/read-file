@@ -156,8 +156,8 @@ public class SpcDao extends Dao<ClienteSpc> {
 			PreparedStatement psm2 = conn.prepareStatement(sql2);) {
 			
 			for (ClienteSpc cliente : clientes) {
-				long contrato = separaContrato(cliente);
-				int parcela = separaParcela(cliente);
+				long contrato = UtilCliente.separaContrato(cliente.getContrato());
+				int parcela = UtilCliente.separaParcela(cliente.getContrato());
 				
 				if (contrato > 0 && parcela > 0) {
 					psm1.setLong(1, contrato);
@@ -181,34 +181,6 @@ public class SpcDao extends Dao<ClienteSpc> {
 		
 	}
 	
-	private long separaContrato(ClienteSpc cliente) {
-		String contrato  = cliente.getContrato().trim();
-		
-		contrato = contrato.replace("/", "-").replaceAll("[\\s\\u00A0]+","").trim();
-		
-		if (contrato.contains("-")) {
-			return Long.parseLong(contrato.split("-")[0]);
-		}
-		
-		return Long.parseLong(contrato);
-		
-		
-	}
-	private int separaParcela(ClienteSpc cliente) {
-		String contrato  = cliente.getContrato().trim();
-		
-		contrato = contrato.replace("/", "-");
-		
-		if (contrato.contains("-")) {
-			String[] partes = contrato.split("-");
-			
-			if (partes.length > 1) {
-				return Integer.parseInt(partes[1].trim());
-			}
-		}
-		
-		return 0;
-		
-	}
+	
 
 }
