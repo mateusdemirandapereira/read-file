@@ -50,6 +50,8 @@ public class NegativadoSpc extends Negativado {
 		return listCliente;
 	}
 	
+
+	
 	private int getInt(String[] dados, int index) {
 		String texto = getCampo(dados, index);
 		

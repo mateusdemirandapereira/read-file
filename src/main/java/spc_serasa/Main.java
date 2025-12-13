@@ -152,6 +152,21 @@ public class Main extends Application {
 		thread.start();
 	}
 
+	private void atualizarSpc() {
+		try (Connection conn1 = connectionFactory.getConnection();
+			Connection conn2 = connectionFactory.getConnection("db2")) {
+			SpcDao spcDaoOrigem = new SpcDao(conn1);
+			SpcDao spcDaoDestino = new SpcDao(conn2);
+			
+			List<ClienteSpc> clientes = spcDaoOrigem.pegarNegativado();
+			spcDaoDestino.atualizaNegativado(clientes);			
+			
+
+		} catch(SQLException ex) {
+			throw new RuntimeException("Erro ao atualizar SPC");
+		}
+	}
+
 	private void importSpc(List<String[]> linhas) {
 		try (Connection conn = connectionFactory.getConnection()) {
 
@@ -161,12 +176,10 @@ public class Main extends Application {
 			dao.deletarTodos();
 			dao.inserir(clientes);
 
-		} catch(ErroImportacaoException ex1) {
+		} catch (ErroImportacaoException ex1) {
 			throw ex1;
-		}
-		catch (SQLException ex2) {
-			throw new RuntimeException("Erro ao acessar o banco de dados durante a importação do SPC. " ,
-					ex2);
+		} catch (SQLException ex2) {
+			throw new RuntimeException("Erro ao acessar o banco de dados durante a importação do SPC. ", ex2);
 		}
 	}
 
@@ -268,10 +281,10 @@ public class Main extends Application {
 		tableView.getColumns().clear();
 		tableView.setItems(obsLista);
 		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
-		
+
 		TableColumn<Cliente, String> colunaStatus = new TableColumn<>("Status");
 		colunaStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-		
+
 		TableColumn<Cliente, Long> colunaCodigo = new TableColumn<>("Id");
 		colunaCodigo.setCellValueFactory(new PropertyValueFactory<>("id"));
 
@@ -284,25 +297,23 @@ public class Main extends Application {
 		TableColumn<Cliente, String> colunaTipo = new TableColumn<>("Tipo Pessoa");
 		colunaTipo.setCellValueFactory(new PropertyValueFactory<>("tipoPessoa"));
 
-		
-
 		TableColumn<Cliente, String> colunaNatureza = new TableColumn<>("Natureza");
 		colunaNatureza.setCellValueFactory(new PropertyValueFactory<>("natureza"));
-		
+
 		TableColumn<Cliente, Double> colunaValor = new TableColumn<>("Valor");
 		colunaValor.setCellValueFactory(new PropertyValueFactory<>("valor"));
-		
+
 		TableColumn<Cliente, LocalDate> colunaDataInclusao = new TableColumn<>("Data de Cadastro");
 		colunaDataInclusao.setCellValueFactory(new PropertyValueFactory<>("dataCadastro"));
-		
+
 		TableColumn<Cliente, LocalTime> colunaHora = new TableColumn<>("Hora");
 		colunaHora.setCellValueFactory(new PropertyValueFactory<>("hora"));
-		
+
 		TableColumn<Cliente, LocalDate> colunaDataVenc = new TableColumn<>("Data Vencimento");
 		colunaDataVenc.setCellValueFactory(new PropertyValueFactory<>("dataVencimento"));
 
 		TableColumn<Cliente, String> colunaOperacao = new TableColumn<>("Operação");
-		colunaOperacao.setCellValueFactory(new PropertyValueFactory<>("operacao"));		
+		colunaOperacao.setCellValueFactory(new PropertyValueFactory<>("operacao"));
 
 		tableView.getColumns().addAll(colunaStatus, colunaCodigo, colunaNome, colunaTipo, colunaCpf, colunaNatureza,
 				colunaValor, colunaDataInclusao, colunaHora, colunaDataVenc, colunaOperacao);

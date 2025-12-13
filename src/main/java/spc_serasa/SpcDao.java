@@ -154,27 +154,36 @@ public class SpcDao extends Dao<ClienteSpc> {
 		
 		try(PreparedStatement psm1 = conn.prepareStatement(sql1);
 			PreparedStatement psm2 = conn.prepareStatement(sql2);) {
+			long contrato;
+			int parcela;
 			
 			for (ClienteSpc cliente : clientes) {
-				long contrato = UtilCliente.separaContrato(cliente.getContrato());
-				int parcela = UtilCliente.separaParcela(cliente.getContrato());
+				
+				try {
+					contrato = UtilCliente.separaContrato(cliente.getContrato());
+					 parcela = UtilCliente.separaParcela(cliente.getContrato());
+				} catch(NumberFormatException ex1) {
+					continue;
+				}
+				 
 				
 				if (contrato > 0 && parcela > 0) {
 					psm1.setLong(1, contrato);
 					psm1.setInt(2, parcela);
-					psm1.executeUpdate();
+					psm1.addBatch();
 				} else if (contrato > 0 && parcela <= 0) {
 					psm2.setLong(1, contrato);
 					psm2.setInt(2, 5);
 					psm2.setInt(3, 1);
-					psm2.executeUpdate();
+					psm2.addBatch();
 				}
 			}
 			
-			
+			psm1.executeBatch();
+			psm2.executeBatch();
 			
 		} catch(SQLException ex) {
-			throw new RuntimeException("Erro ao tentar negativar os Cliente do spc", ex);
+			throw new RuntimeException("Erro ao atualizar clientes negativados do spc", ex);
 		}
 		
 		
