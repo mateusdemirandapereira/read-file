@@ -161,8 +161,12 @@ public class Main extends Application {
 			dao.deletarTodos();
 			dao.inserir(clientes);
 
-		} catch (SQLException e) {
-			throw new RuntimeException("Erro ao importar SPC: " + e.getMessage(), e);
+		} catch(ErroImportacaoException ex1) {
+			throw ex1;
+		}
+		catch (SQLException ex2) {
+			throw new RuntimeException("Erro ao acessar o banco de dados durante a importação do SPC. " ,
+					ex2);
 		}
 	}
 
