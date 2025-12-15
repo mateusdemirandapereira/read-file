@@ -69,6 +69,66 @@ public class Main extends Application {
 		listButtonProtesto.setOnAction(e -> tabelaProtesto());
 
 		buttonUpload.setOnAction(e -> onUpload(primaryStage));
+		
+		sincronizar.setOnAction(event -> {
+			String opcao = comboBoxSinc.getValue();
+			
+			if (opcao == null) {
+				System.out.println("Selecione um opção antes de executar.");
+				showError("Erro", "Selection um opção válida antes de sincronizar.");
+				return;
+			}
+			
+			showInfo("Sincronizando", "Iniciando a sincronização para " + opcao);
+			
+			Task<Void> task = new Task<Void>() {
+				
+				@Override
+				protected Void call() throws Exception {
+					try {
+						switch (opcao) {
+						case "Spc":
+							atualizarSpc();
+							break;
+						case "Serasa":
+							break;
+						case "Protesto":
+							break;
+						default: 
+							throw new IllegalArgumentException("Opção inválida: " + opcao);	
+					}
+					} catch(Exception e) {
+						showError("Erro", "Falha ao sincronizar com a opção selectionada: " + opcao);
+						e.printStackTrace();
+					}
+					
+					return null;
+					
+				}
+				
+				
+			};
+			
+			progressIndicator.visibleProperty().bind(task.runningProperty());
+			task.setOnSucceeded(evt -> {
+				showInfo("Sincronização Concluída", "A sincronização foi concluída com sucesso!");
+				progressIndicator.visibleProperty().unbind();
+				progressIndicator.setVisible(false);
+			});
+			
+			task.setOnFailed(evt -> {
+				showError("Erro na Sincronização", "Houve um erro na sincronização.");
+				progressIndicator.visibleProperty().unbind();
+				progressIndicator.setVisible(false);
+			});
+			
+			Thread thread = new Thread(task, "sync-task");
+			thread.setDaemon(true);
+			thread.start();
+			
+		});
+		
+		
 
 		borderPane.setTop(hboxOpcao);
 		borderPane.setCenter(tableView);
@@ -154,15 +214,14 @@ public class Main extends Application {
 
 	private void atualizarSpc() {
 		try (Connection conn1 = connectionFactory.getConnection();
-			Connection conn2 = connectionFactory.getConnection("db2")) {
+				Connection conn2 = connectionFactory.getConnection("db2")) {
 			SpcDao spcDaoOrigem = new SpcDao(conn1);
 			SpcDao spcDaoDestino = new SpcDao(conn2);
-			
-			List<ClienteSpc> clientes = spcDaoOrigem.pegarNegativado();
-			spcDaoDestino.atualizaNegativado(clientes);			
-			
 
-		} catch(SQLException ex) {
+			List<ClienteSpc> clientes = spcDaoOrigem.pegarNegativado();
+			spcDaoDestino.atualizaNegativado(clientes);
+
+		} catch (SQLException ex) {
 			throw new RuntimeException("Erro ao atualizar SPC");
 		}
 	}
