@@ -148,7 +148,7 @@ public class SpcDao extends Dao<ClienteSpc> {
 		
 		String sql2 = "update itxa set itxa.status = case "
 				+ "when datediff(date_format(current_date(), \"%Y%m%d\"), itxa.duedate) >= 30 then 3 "
-				+ "when datediff(date_format(current_date(), \\\"%Y%m%d\\\"), itxa.duedate) < 30 and itxa.status = 4 then 4 "
+				+ "when datediff(date_format(current_date(), \"%Y%m%d\"), itxa.duedate) < 30 and itxa.status = 4 then 4 "
 				+ "else 0 "
 				+ "end   where itxa.contrno = ? and itxa.status not in(?, ?)";
 		
