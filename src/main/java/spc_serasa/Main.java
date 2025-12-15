@@ -78,29 +78,25 @@ public class Main extends Application {
 				showError("Erro", "Selection um opção válida antes de sincronizar.");
 				return;
 			}
-			
-			showInfo("Sincronizando", "Iniciando a sincronização para " + opcao);
-			
+						
 			Task<Void> task = new Task<Void>() {
 				
 				@Override
 				protected Void call() throws Exception {
-					try {
+				
 						switch (opcao) {
 						case "Spc":
 							atualizarSpc();
 							break;
 						case "Serasa":
-							break;
+							throw new UnsupportedOperationException("Sincronização Serasa não implementada");
+						
 						case "Protesto":
-							break;
+							throw new UnsupportedOperationException("Sincronização Protesto não implementada");
+							
 						default: 
 							throw new IllegalArgumentException("Opção inválida: " + opcao);	
-					}
-					} catch(Exception e) {
-						showError("Erro", "Falha ao sincronizar com a opção selectionada: " + opcao);
-						e.printStackTrace();
-					}
+					}				
 					
 					return null;
 					
@@ -110,17 +106,23 @@ public class Main extends Application {
 			};
 			
 			progressIndicator.visibleProperty().bind(task.runningProperty());
+			
 			task.setOnSucceeded(evt -> {
-				showInfo("Sincronização Concluída", "A sincronização foi concluída com sucesso!");
 				progressIndicator.visibleProperty().unbind();
 				progressIndicator.setVisible(false);
+				showInfo("Sucesso", "A sincronização foi concluída com sucesso!");
 			});
 			
 			task.setOnFailed(evt -> {
 				showError("Erro na Sincronização", "Houve um erro na sincronização.");
 				progressIndicator.visibleProperty().unbind();
 				progressIndicator.setVisible(false);
+				Throwable erro = task.getException();
+				showError("Erro na sincronização", erro == null ? "Erro desconhecido" : erro.getMessage());
+				
+				erro.printStackTrace();
 			});
+			
 			
 			Thread thread = new Thread(task, "sync-task");
 			thread.setDaemon(true);
@@ -212,7 +214,7 @@ public class Main extends Application {
 		thread.start();
 	}
 
-	private void atualizarSpc() {
+	private void atualizarSpc() throws SQLException {
 		try (Connection conn1 = connectionFactory.getConnection();
 				Connection conn2 = connectionFactory.getConnection("db2")) {
 			SpcDao spcDaoOrigem = new SpcDao(conn1);
@@ -221,8 +223,6 @@ public class Main extends Application {
 			List<ClienteSpc> clientes = spcDaoOrigem.pegarNegativado();
 			spcDaoDestino.atualizaNegativado(clientes);
 
-		} catch (SQLException ex) {
-			throw new RuntimeException("Erro ao atualizar SPC");
 		}
 	}
 
