@@ -15,6 +15,19 @@ public class ClienteProtesto extends Cliente {
 	private final String irregularidade;
 	private final String ocorrenciaTitulo;
 	
+	public ClienteProtesto(String cpf, String numeroTitulo) {
+		super(cpf);
+		this.comarcaCartorio = null;
+		this.dataSolicitacao = null;
+		this.comarcaDevedor = null;
+		this.numeroTitulo = numeroTitulo;
+		this.valorProtesto = 0d;
+		this.protocolo = 0l;
+		this.statusPedido = null;
+		this.irregularidade = null;
+		this.ocorrenciaTitulo = null;
+	}
+	
 	public ClienteProtesto(long pedido, String comarcaCartorio, LocalDate dataSolicitacao,
 			String comarcaDevedor, String nomeDevedor, String docDevedor, String numeroTitulo, double valorTitulo,
 			double valorProtesto, long protocolo, LocalDate dataProtocolo, String especie,

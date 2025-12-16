@@ -116,6 +116,13 @@ public class ProtestoDao extends Dao<ClienteProtesto> {
 
 	}
 	
+	
+	public List<ClienteProtesto> pegarNegativado() {
+		
+		String sql =  "select protesto.numeroTitulo, protesto.docDevedor from protesto";
+		
+	}
+	
 	private Date toSqlDate(LocalDate data) {
 		return data != null ? Date.valueOf(data) : null;
 	}
