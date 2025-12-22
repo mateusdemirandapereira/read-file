@@ -107,5 +107,35 @@ public class SerasaDao extends Dao<ClienteSerasa> {
 		}
 		
 	}
-
+	
+	@Override
+	public List<ClienteSerasa> pegarNegativado() {
+		
+		String sql = "select distinct serasa.serasa_cpf from serasa where serasa.serasa_operacao != \"Baixar\"";
+		
+		List<ClienteSerasa> listaClientes = new ArrayList<>();
+		try (PreparedStatement pstmp = conn.prepareStatement(sql)) {
+			
+			ResultSet resultSet = pstmp.executeQuery();
+			
+			while(resultSet.next()) {
+				String cpf = resultSet.getString(1);
+				ClienteSerasa clienteSerasa = new ClienteSerasa(cpf);
+				
+				listaClientes.add(clienteSerasa);
+			}
+			
+			return listaClientes;
+			
+		} catch(SQLException ex) {
+			throw new RuntimeException("Não há clientes negativados no SPC.",ex);
+		}
+		
+		
+	}
+	
+	public void atualizaNegativado(List<ClienteSerasa> clientes) {
+		
+	}
+ 
 }

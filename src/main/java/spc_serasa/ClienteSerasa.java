@@ -10,6 +10,13 @@ public class ClienteSerasa extends Cliente {
 	private final String natureza;
 	private final String operacao;
 	
+	public ClienteSerasa(String cpf) {
+		super(cpf);
+		this.status = null;
+		this.natureza = null;
+		this.operacao = null;
+	}
+	
 	public ClienteSerasa(String status, long id, String nome,String tipo, String documento,String natureza,
 			double valor,LocalDate dataCadastro,LocalTime hora,LocalDate dataVencimento,String operacao) {
 		
