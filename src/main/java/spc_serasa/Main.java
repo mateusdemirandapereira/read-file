@@ -89,10 +89,12 @@ public class Main extends Application {
 							atualizarSpc();
 							break;
 						case "Serasa":
-							throw new UnsupportedOperationException("Sincronização Serasa não implementada");
+							atualizarSerasa();
+							break;
 						
 						case "Protesto":
 							throw new UnsupportedOperationException("Sincronização Protesto não implementada");
+							
 							
 						default: 
 							throw new IllegalArgumentException("Opção inválida: " + opcao);	
@@ -212,6 +214,16 @@ public class Main extends Application {
 		Thread thread = new Thread(task, "import-task");
 		thread.setDaemon(true);
 		thread.start();
+	}
+	private void atualizarSerasa() throws SQLException {
+		try(Connection conn1 = connectionFactory.getConnection();
+				Connection conn2 = connectionFactory.getConnection("db2")) {
+			SerasaDao serasaDaoOrigem = new SerasaDao(conn1);
+			SerasaDao serasaDaoDestino = new SerasaDao(conn2);
+			
+			List<ClienteSerasa> clientes = serasaDaoOrigem.pegarNegativado();
+			serasaDaoDestino.atualizaNegativado(clientes);
+		}
 	}
 
 	private void atualizarSpc() throws SQLException {
