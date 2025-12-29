@@ -119,7 +119,11 @@ public class ProtestoDao extends Dao<ClienteProtesto> {
 	
 	public List<ClienteProtesto> pegarNegativado() {
 		
-		String sql =  "select protesto.numeroTitulo, protesto.docDevedor from protesto where substring_index(protesto.ocorrenciaTitulo, \"-\", 1) = 2";
+		String sql =  "select distinct if(position(\"-\", protesto.numeroTitulo) > 0,"
+				+ 				" substring_index(protesto.numeroTitulo, \"-\", 1),"
+				+ 				" protesto.numeroTitulo) as numeroTitulo,"
+				+               " protesto.docDevedor from protesto "
+				+ "where substring_index(protesto.ocorrenciaTitulo, \"-\", 1) = 2";
 		List<ClienteProtesto> listaClienteProtesto = new ArrayList<>();
 		
 		try(PreparedStatement pstmp = conn.prepareStatement(sql)) {
@@ -144,6 +148,12 @@ public class ProtestoDao extends Dao<ClienteProtesto> {
 	}
 	
 	public void atualizaNegativado(List<ClienteSpc> clientes) {
+		
+		String sql1 = "update custp set custp.bits3 = ? "
+				+ "where custp.no in(distinct select inst.custno from inst where inst.contrno = ?)";
+		
+		final int SITUACAOCLIENTE = 13;
+		
 		
 		
 		
