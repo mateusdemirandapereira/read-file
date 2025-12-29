@@ -156,10 +156,11 @@ public class ProtestoDao extends Dao<ClienteProtesto> {
 		try(PreparedStatement pstmp = conn.prepareStatement(sql)) {
 			
 			for (ClienteProtesto cliente : clientes) {
-				long numeroTitulo = Integer.parseInt(cliente.getNumeroTitulo());
+				long numeroTitulo = Long.parseLong(cliente.getNumeroTitulo().trim());
 				
-				pstmp.setLong(2, numeroTitulo);
 				pstmp.setInt(1, SITUACAOCLIENTE);
+				pstmp.setLong(2, numeroTitulo);
+				
 				
 				pstmp.addBatch();
 			}
@@ -167,7 +168,7 @@ public class ProtestoDao extends Dao<ClienteProtesto> {
 			pstmp.executeBatch();
 			
 		} catch(SQLException ex) {
-			throw new RuntimeException("Erro ao atualizar clientes Protestado");
+			throw new RuntimeException("Erro ao atualizar clientes Protestado", ex);
 		}
 		
 		

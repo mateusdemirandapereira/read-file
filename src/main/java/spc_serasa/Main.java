@@ -93,7 +93,8 @@ public class Main extends Application {
 							break;
 						
 						case "Protesto":
-							throw new UnsupportedOperationException("Sincronização Protesto não implementada");
+							atualizarProtesto();
+							break;
 							
 							
 						default: 
@@ -236,6 +237,19 @@ public class Main extends Application {
 			spcDaoDestino.atualizaNegativado(clientes);
 
 		}
+	}
+	
+	private void atualizarProtesto() throws SQLException {
+		try (Connection conn1 = connectionFactory.getConnection();
+				Connection conn2 = connectionFactory.getConnection("db2")) {
+			ProtestoDao ProtestoDaoOrigem = new ProtestoDao(conn1);
+			ProtestoDao ProtestoDaoDestino = new ProtestoDao(conn2);
+
+			List<ClienteProtesto> clientes = ProtestoDaoOrigem.pegarNegativado();
+			ProtestoDaoDestino.atualizaNegativado(clientes);
+
+		}
+		
 	}
 
 	private void importSpc(List<String[]> linhas) {
