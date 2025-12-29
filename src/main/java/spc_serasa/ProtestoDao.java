@@ -119,10 +119,10 @@ public class ProtestoDao extends Dao<ClienteProtesto> {
 	
 	public List<ClienteProtesto> pegarNegativado() {
 		
-		String sql =  "select distinct if(position(\"-\", protesto.numeroTitulo) > 0,"
+		String sql =  "select distinct if(position(\"-\" in protesto.numeroTitulo) > 0,"
 				+ 				" substring_index(protesto.numeroTitulo, \"-\", 1),"
-				+ 				" protesto.numeroTitulo) as numeroTitulo,"
-				+               " protesto.docDevedor from protesto "
+				+ 				" protesto.numeroTitulo) as numeroTitulo "
+				+               " from protesto "
 				+ "where substring_index(protesto.ocorrenciaTitulo, \"-\", 1) = 2";
 		List<ClienteProtesto> listaClienteProtesto = new ArrayList<>();
 		
@@ -132,9 +132,8 @@ public class ProtestoDao extends Dao<ClienteProtesto> {
 			
 			while (resultSet.next()) {
 				String numeroTitulo = resultSet.getString(1);
-				String docDevedor = resultSet.getString(2);
 				
-				ClienteProtesto clienteProtesto = new ClienteProtesto(docDevedor, numeroTitulo);
+				ClienteProtesto clienteProtesto = new ClienteProtesto(numeroTitulo);
 				listaClienteProtesto.add(clienteProtesto);
 			}
 			
@@ -147,12 +146,29 @@ public class ProtestoDao extends Dao<ClienteProtesto> {
 		
 	}
 	
-	public void atualizaNegativado(List<ClienteSpc> clientes) {
+	public void atualizaNegativado(List<ClienteProtesto> clientes) {
 		
-		String sql1 = "update custp set custp.bits3 = ? "
-				+ "where custp.no in(distinct select inst.custno from inst where inst.contrno = ?)";
+		String sql = "update custp set custp.bits3 = ? "
+				+ "where custp.no in(select distinct inst.custno from inst where inst.contrno = ?)";
 		
 		final int SITUACAOCLIENTE = 13;
+		
+		try(PreparedStatement pstmp = conn.prepareStatement(sql)) {
+			
+			for (ClienteProtesto cliente : clientes) {
+				long numeroTitulo = Integer.parseInt(cliente.getNumeroTitulo());
+				
+				pstmp.setLong(2, numeroTitulo);
+				pstmp.setInt(1, SITUACAOCLIENTE);
+				
+				pstmp.addBatch();
+			}
+			
+			pstmp.executeBatch();
+			
+		} catch(SQLException ex) {
+			throw new RuntimeException("Erro ao atualizar clientes Protestado");
+		}
 		
 		
 		

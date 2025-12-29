@@ -5,34 +5,38 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 public abstract class Cliente {
-	
+
 	private final long codigo;
 	private final String nome;
 	private final String cpf;
 	private final LocalDate dataInclusao;
-	private final  LocalTime hora;
+	private final LocalTime hora;
 	private final double valor;
 	private final LocalDate dataVencimento;
 	private final String tipo;
-	
-	public Cliente(long codigo, String nome, String cpf, LocalDate dataInclusao,LocalTime hora, double valor,
+
+	public Cliente(long codigo, String nome, String cpf, LocalDate dataInclusao, LocalTime hora, double valor,
 			LocalDate dataVencimento, String tipo) {
-		
+
 		this.codigo = codigo;
 		this.nome = nome;
 		this.cpf = cpf;
 		this.dataInclusao = dataInclusao;
-		this.hora =  hora != null ? hora : LocalTime.MIDNIGHT;
+		this.hora = hora != null ? hora : LocalTime.MIDNIGHT;
 		this.valor = valor;
 		this.dataVencimento = dataVencimento;
 		this.tipo = tipo;
 	}
-	
+
 	public Cliente(String cpf) {
-		
-		this(0l, null, cpf, null, null,0f, null, null);
+
+		this(0l, null, cpf, null, null, 0f, null, null);
 	}
 
+	public Cliente() {
+
+		this(0l, null, null, null, null, 0f, null, null);
+	}
 
 	public long getCodigo() {
 		return codigo;
@@ -65,13 +69,10 @@ public abstract class Cliente {
 	public String getTipo() {
 		return tipo;
 	}
-	
+
 	@Override
 	public String toString() {
-		return String.format("%d %s %s %.2f %s %s %s",
-				codigo, nome, cpf, valor, dataInclusao, hora, dataVencimento);
+		return String.format("%d %s %s %.2f %s %s %s", codigo, nome, cpf, valor, dataInclusao, hora, dataVencimento);
 	}
-	
-	
 
 }
