@@ -15,8 +15,8 @@ public class ClienteProtesto extends Cliente {
 	private final String irregularidade;
 	private final String ocorrenciaTitulo;
 	
-	public ClienteProtesto(String cpf, String numeroTitulo) {
-		super(cpf);
+	public ClienteProtesto(String docDevedor, String numeroTitulo) {
+		super(docDevedor);
 		this.comarcaCartorio = null;
 		this.dataSolicitacao = null;
 		this.comarcaDevedor = null;

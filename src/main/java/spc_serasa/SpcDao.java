@@ -153,38 +153,59 @@ public class SpcDao extends Dao<ClienteSpc> {
 				+ "end   where itxa.contrno = ? and itxa.status not in(?, ?)";
 		
 		
-		try(PreparedStatement psm1 = conn.prepareStatement(sql1);
-			PreparedStatement psm2 = conn.prepareStatement(sql2);) {
-			long contrato;
-			int parcela;
+		boolean autoComitOriginal = true;
+		
+		final int  STATUSCANCELADO = 5;
+		final int  STATUSQUITADO = 1;
+		
+		try {
+			try(PreparedStatement psm1 = conn.prepareStatement(sql1);
+					PreparedStatement psm2 = conn.prepareStatement(sql2);) {
+					long contrato;
+					int parcela;
+					
+					for (ClienteSpc cliente : clientes) {
+						
+						try {
+							contrato = UtilCliente.separaContrato(cliente.getContrato());
+							 parcela = UtilCliente.separaParcela(cliente.getContrato());
+						} catch(NumberFormatException ex1) {
+							continue;
+						}
+						 
+						
+						if (contrato > 0 && parcela > 0) {
+							psm1.setLong(1, contrato);
+							psm1.setInt(2, parcela);
+							psm1.addBatch();
+						} else if (contrato > 0 && parcela <= 0) {
+							psm2.setLong(1, contrato);
+							psm2.setInt(2, STATUSCANCELADO);
+							psm2.setInt(3, STATUSQUITADO);
+							psm2.addBatch();
+						}
+					}
+					
+					psm1.executeBatch();
+					psm2.executeBatch();
+					
+					conn.commit();
+					
+				}
 			
-			for (ClienteSpc cliente : clientes) {
-				
-				try {
-					contrato = UtilCliente.separaContrato(cliente.getContrato());
-					 parcela = UtilCliente.separaParcela(cliente.getContrato());
-				} catch(NumberFormatException ex1) {
-					continue;
-				}
-				 
-				
-				if (contrato > 0 && parcela > 0) {
-					psm1.setLong(1, contrato);
-					psm1.setInt(2, parcela);
-					psm1.addBatch();
-				} else if (contrato > 0 && parcela <= 0) {
-					psm2.setLong(1, contrato);
-					psm2.setInt(2, 5);
-					psm2.setInt(3, 1);
-					psm2.addBatch();
-				}
+		} catch(SQLException ex1) {
+			try {
+				conn.rollback();
+			} catch(SQLException ex2) {
+				throw new RuntimeException("Erro ao realizar rollback", ex2);
 			}
-			
-			psm1.executeBatch();
-			psm2.executeBatch();
-			
-		} catch(SQLException ex) {
-			throw new RuntimeException("Erro ao atualizar clientes negativados do spc", ex);
+			throw new RuntimeException("Erro ao atualizar clientes negativados do spc", ex1);
+		} finally {
+			try {
+				conn.setAutoCommit(autoComitOriginal);
+			} catch(SQLException ex) {
+				throw new RuntimeException("Erro ao restaurar autocommit", ex);
+			}
 		}
 		
 		

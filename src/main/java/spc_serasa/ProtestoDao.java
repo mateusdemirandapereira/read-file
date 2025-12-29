@@ -119,9 +119,36 @@ public class ProtestoDao extends Dao<ClienteProtesto> {
 	
 	public List<ClienteProtesto> pegarNegativado() {
 		
-		String sql =  "select protesto.numeroTitulo, protesto.docDevedor from protesto";
+		String sql =  "select protesto.numeroTitulo, protesto.docDevedor from protesto where substring_index(protesto.ocorrenciaTitulo, \"-\", 1) = 2";
+		List<ClienteProtesto> listaClienteProtesto = new ArrayList<>();
+		
+		try(PreparedStatement pstmp = conn.prepareStatement(sql)) {
+			
+			ResultSet resultSet = pstmp.executeQuery();
+			
+			while (resultSet.next()) {
+				String numeroTitulo = resultSet.getString(1);
+				String docDevedor = resultSet.getString(2);
+				
+				ClienteProtesto clienteProtesto = new ClienteProtesto(docDevedor, numeroTitulo);
+				listaClienteProtesto.add(clienteProtesto);
+			}
+			
+			return listaClienteProtesto;
+			
+		}catch (SQLException ex) {
+			throw new RuntimeException("Não há Clientes negativados no Protesto!", ex);
+		}
+		
 		
 	}
+	
+	public void atualizaNegativado(List<ClienteSpc> clientes) {
+		
+		
+		
+	}
+	
 	
 	private Date toSqlDate(LocalDate data) {
 		return data != null ? Date.valueOf(data) : null;
