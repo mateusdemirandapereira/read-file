@@ -1,0 +1,197 @@
+/* =====================================================
+   CORES BASE DO SISTEMA
+   ===================================================== */
+/*
+   Vermelho principal: #b71c1c
+   Vermelho suave:     #fdeaea
+   Vermelho hover:     #f8d7da
+   Fundo geral:        #f5eaea
+   Branco:             #ffffff
+*/
+
+/* =====================================================
+   ROOT (FUNDO DA TELA)
+   ===================================================== */
+
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-background-color: #f5eaea; /* vermelho bem suave */
+}
+
+/* =====================================================
+   BARRA SUPERIOR (HBox)
+   ===================================================== */
+
+.hbox {
+    -fx-padding: 12 15 12 15;
+    -fx-spacing: 10;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0b4b4;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* =====================================================
+   BOTÕES
+   ===================================================== */
+
+.button {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #b71c1c;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-text-fill: #b71c1c;
+    -fx-font-weight: bold;
+    -fx-padding: 7 16 7 16;
+    -fx-cursor: hand;
+}
+
+/* Hover */
+.button:hover {
+    -fx-background-color: #fdeaea;
+}
+
+/* Pressionado */
+.button:pressed {
+    -fx-background-color: #f8d7da;
+}
+
+/* Desabilitado */
+.button:disabled {
+    -fx-opacity: 0.5;
+}
+
+/* =====================================================
+   COMBOBOX
+   ===================================================== */
+
+.combo-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d6a3a3;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+.combo-box:hover {
+    -fx-border-color: #b71c1c;
+}
+
+.combo-box .list-cell {
+    -fx-padding: 6;
+}
+
+/* =====================================================
+   CONTAINER CENTRAL (VBox)
+   ===================================================== */
+
+.vbox {
+    -fx-padding: 12;
+}
+
+/* =====================================================
+   TABLEVIEW
+   ===================================================== */
+
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d6a3a3;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+/* Cabeçalho */
+.table-view .column-header-background {
+    -fx-background-color: #fbecec;
+}
+
+.table-view .column-header {
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-text-fill: #7f1d1d;
+    -fx-border-color: #e5bcbc;
+}
+
+/* Remove coluna extra */
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* =====================================================
+   CÉLULAS
+   ===================================================== */
+
+.table-cell {
+    -fx-alignment: CENTER;
+    -fx-padding: 6 10;
+    -fx-font-size: 13px;
+    -fx-text-fill: #000000;
+}
+
+/* Altura das linhas */
+.table-row-cell {
+    -fx-cell-size: 34px;
+}
+
+/* Linhas alternadas */
+.table-row-cell:odd {
+    -fx-background-color: #ffffff;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #fff7f7;
+}
+
+/* =====================================================
+   HOVER (vermelho suave elegante)
+   ===================================================== */
+
+.table-row-cell:hover {
+    -fx-background-color: #fdeaea;
+}
+
+/* =====================================================
+   SELEÇÃO
+   ===================================================== */
+
+.table-row-cell:selected {
+    -fx-background-color: #f8d7da;
+}
+
+.table-row-cell:selected:hover {
+    -fx-background-color: #f3bcbc;
+}
+
+/* =====================================================
+   SCROLLBAR
+   ===================================================== */
+
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #c98c8c;
+    -fx-background-radius: 4;
+}
+
+/* =====================================================
+   COLUNAS
+   ===================================================== */
+
+.table-column {
+    -fx-min-width: 120px;
+}
+
+/* Coluna de nome maior */
+#nomeCliente {
+    -fx-min-width: 260px;
+}
+
+/* =====================================================
+   PROGRESS INDICATOR
+   ===================================================== */
+
+.progress-indicator {
+    -fx-progress-color: #b71c1c;
+}

@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -23,6 +24,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -134,12 +136,22 @@ public class Main extends Application {
 		});
 		
 		
-
+		VBox tableContainer = new VBox(tableView);
+		tableContainer.setAlignment(Pos.TOP_CENTER);
+		
+		tableContainer.prefWidthProperty().bind(
+				borderPane.widthProperty().multiply(0.8));
+		
 		borderPane.setTop(hboxOpcao);
-		borderPane.setCenter(tableView);
-		BorderPane.setMargin(tableView, new Insets(15, 0, 0, 0));
+		borderPane.setCenter(tableContainer);
+		BorderPane.setMargin(tableContainer, new Insets(15, 0, 0, 0));
+		
+		
+		scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 
 		primaryStage.setScene(scene);
+		
+		
 		primaryStage.show();
 
 		// carrega ao iniciar
@@ -308,8 +320,9 @@ public class Main extends Application {
 		ObservableList<Cliente> obsLista = FXCollections.observableArrayList(rows);
 		tableView.getColumns().clear();
 		tableView.setItems(obsLista);
-		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
-
+		//tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+		tableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+		
 		TableColumn<Cliente, Long> colunaCodigoSpc = new TableColumn<>("Codigo SPC");
 		colunaCodigoSpc.setCellValueFactory(new PropertyValueFactory<>("codigoSpc"));
 
@@ -318,6 +331,7 @@ public class Main extends Application {
 
 		TableColumn<Cliente, String> colunaConsumidor = new TableColumn<>("Consumidor");
 		colunaConsumidor.setCellValueFactory(new PropertyValueFactory<>("consumidor"));
+		colunaConsumidor.setId("nomeCliente");
 
 		TableColumn<Cliente, String> colunaContrato = new TableColumn<>("Contrato");
 		colunaContrato.setCellValueFactory(new PropertyValueFactory<>("contrato"));
@@ -365,7 +379,8 @@ public class Main extends Application {
 		ObservableList<Cliente> obsLista = FXCollections.observableArrayList(rows);
 		tableView.getColumns().clear();
 		tableView.setItems(obsLista);
-		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+		//tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+		tableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
 		TableColumn<Cliente, String> colunaStatus = new TableColumn<>("Status");
 		colunaStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -418,7 +433,8 @@ public class Main extends Application {
 		ObservableList<Cliente> obsLista = FXCollections.observableArrayList(rows);
 		tableView.getColumns().clear();
 		tableView.setItems(obsLista);
-		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+		//tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+		tableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
 		TableColumn<Cliente, Long> colunaPedido = new TableColumn<>("Pedido");
 		colunaPedido.setCellValueFactory(new PropertyValueFactory<>("pedido"));
